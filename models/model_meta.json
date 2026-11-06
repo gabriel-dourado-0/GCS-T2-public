@@ -1,0 +1,50 @@
+{
+  "model_type": "random_forest",
+  "hyperparameters": {
+    "n_estimators": 100,
+    "max_depth": 6
+  },
+  "params_hash": "f0428116ffb64083",
+  "git_commit": "3f9573dfc44e2372d0c1d10c1fc3f40966173c58",
+  "training_data": {
+    "path": "data/processed/train.csv",
+    "md5": "56055803c40abefe8bcccb986a6ea299",
+    "rows": 455
+  },
+  "features": [
+    "mean radius",
+    "mean texture",
+    "mean perimeter",
+    "mean area",
+    "mean smoothness",
+    "mean compactness",
+    "mean concavity",
+    "mean concave points",
+    "mean symmetry",
+    "mean fractal dimension",
+    "radius error",
+    "texture error",
+    "perimeter error",
+    "area error",
+    "smoothness error",
+    "compactness error",
+    "concavity error",
+    "concave points error",
+    "symmetry error",
+    "fractal dimension error",
+    "worst radius",
+    "worst texture",
+    "worst perimeter",
+    "worst area",
+    "worst smoothness",
+    "worst compactness",
+    "worst concavity",
+    "worst concave points",
+    "worst symmetry",
+    "worst fractal dimension"
+  ],
+  "environment": {
+    "python": "3.13.3",
+    "scikit-learn": "1.9.1"
+  }
+}

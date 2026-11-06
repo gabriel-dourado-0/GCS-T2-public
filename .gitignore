@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+mlruns/
+mlflow.db
+
+# Os arquivos grandes (dataset, splits, pesos) são ignorados pelo Git porque o
+# DVC os gerencia; o próprio DVC adiciona entradas em .gitignore ao rastreá-los.

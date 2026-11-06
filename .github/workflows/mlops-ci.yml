@@ -1,0 +1,60 @@
+name: MLOps CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  # Prompts e agentes: imutabilidade, validação e avaliação de regressão.
+  llm-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Prompts publicados não foram alterados
+        run: python -m llmops.registry verify
+
+      - name: Specs de agentes são válidos
+        run: python -m llmops.agent_spec agents/*.yaml
+
+      - name: Testes unitários
+        run: pytest -q
+
+      - name: Avaliação do prompt (golden set)
+        run: python -m llmops.evaluate_prompt sentiment_classifier@latest --min-pass-rate 0.9
+
+  # Pipeline de ML: reproduz o treino e compara métricas com a branch main.
+  ml-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Obter os dados versionados
+        # Com um remote configurado (S3, GCS, Azure, SSH...) basta `dvc pull`,
+        # usando credenciais guardadas em GitHub Secrets. Sem remote, este
+        # exemplo didático regenera o dataset de forma determinística.
+        run: dvc pull data/raw/dataset.csv || python src/get_data.py
+
+      - name: Reproduzir o pipeline
+        run: dvc repro
+
+      - name: Comparar parâmetros e métricas com a main
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "## Parâmetros" >> "$GITHUB_STEP_SUMMARY"
+          dvc params diff origin/main --md >> "$GITHUB_STEP_SUMMARY"
+          echo "## Métricas" >> "$GITHUB_STEP_SUMMARY"
+          dvc metrics diff origin/main --md >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,57 @@
+# Pipeline declarativo do DVC: cada estágio declara suas dependências (código,
+# dados, parâmetros) e saídas. `dvc repro` só reexecuta o que mudou, e o
+# dvc.lock registra o hash exato de cada entrada/saída (a "configuração" do run).
+
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+      - src/prepare.py
+      - data/raw/dataset.csv
+    params:
+      - data
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - src/lineage.py
+      - data/processed/train.csv
+    params:
+      - featurize
+      - train
+    outs:
+      - models/model.pkl                 # pesos: vão para o cache/remote do DVC
+      - models/model_meta.json:          # metadados de linhagem: vão para o Git
+          cache: false
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/model.pkl
+      - data/processed/test.csv
+    params:
+      - evaluate
+    metrics:
+      - metrics/metrics.json:
+          cache: false
+    plots:
+      - metrics/predictions.csv:
+          cache: false
+          template: confusion
+          x: actual
+          y: predicted
+
+# Registro de modelos baseado em Git (DVC Model Registry / GTO).
+artifacts:
+  breast-cancer-classifier:
+    path: models/model.pkl
+    type: model
+    desc: Classificador para o dataset Breast Cancer Wisconsin
+    labels:
+      - tabular
+      - classification

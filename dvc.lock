@@ -1,0 +1,92 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py
+    deps:
+    - path: data/raw/dataset.csv
+      hash: md5
+      md5: 5daac8b43ff277b3f98cbcffffb004ed
+      size: 162157
+    - path: src/prepare.py
+      hash: md5
+      md5: 0495f97fca5757560c16fd7c1e3ece3e
+      size: 808
+    params:
+      params.yaml:
+        data:
+          test_size: 0.2
+          seed: 42
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 87b9a99c4f3373df44e0d0616a8ebed7
+      size: 24679
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 56055803c40abefe8bcccb986a6ea299
+      size: 97191
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 56055803c40abefe8bcccb986a6ea299
+      size: 97191
+    - path: src/lineage.py
+      hash: md5
+      md5: 4650a58c01f2be971101da7fec6c95b7
+      size: 1501
+    - path: src/train.py
+      hash: md5
+      md5: fd5642fbe0b89f11dd1a1e5e999bad08
+      size: 2429
+    params:
+      params.yaml:
+        featurize:
+          scale: true
+        train:
+          model: random_forest
+          seed: 42
+          random_forest:
+            n_estimators: 100
+            max_depth: 6
+          logistic_regression:
+            C: 1.0
+            max_iter: 1000
+    outs:
+    - path: models/model.pkl
+      hash: md5
+      md5: afb536eaf31782d9aa12d175e22f770c
+      size: 303570
+    - path: models/model_meta.json
+      hash: md5
+      md5: 815d76666759099486a7818267d6aefa
+      size: 1125
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 87b9a99c4f3373df44e0d0616a8ebed7
+      size: 24679
+    - path: models/model.pkl
+      hash: md5
+      md5: afb536eaf31782d9aa12d175e22f770c
+      size: 303570
+    - path: src/evaluate.py
+      hash: md5
+      md5: 6f9a9ab5c6c411e7947c1749f33a7639
+      size: 1431
+    params:
+      params.yaml:
+        evaluate:
+          min_accuracy: 0.9
+    outs:
+    - path: metrics/metrics.json
+      hash: md5
+      md5: ea2e2dbe8f8da08796ab6590c1c275d5
+      size: 62
+    - path: metrics/predictions.csv
+      hash: md5
+      md5: 8e58ef1736414447799de2868341823c
+      size: 473

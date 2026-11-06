@@ -1,0 +1,23 @@
+# Hiperparâmetros e configuração do pipeline.
+# Este arquivo é versionado no Git e rastreado pelo DVC (seção `params` do dvc.yaml):
+# qualquer alteração aqui invalida apenas os estágios que dependem da chave alterada.
+
+data:
+  test_size: 0.2
+  seed: 42
+
+featurize:
+  scale: true
+
+train:
+  model: random_forest        # random_forest | logistic_regression
+  seed: 42
+  random_forest:
+    n_estimators: 100
+    max_depth: 6
+  logistic_regression:
+    C: 1.0
+    max_iter: 1000
+
+evaluate:
+  min_accuracy: 0.90          # quality gate: o estágio falha abaixo deste valor

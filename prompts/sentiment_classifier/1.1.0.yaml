@@ -1,0 +1,23 @@
+name: sentiment_classifier
+version: 1.1.0
+description: Classifica o sentimento de avaliações de produtos (com classe neutra).
+author: equipe-gcs
+model_hints:
+  temperature: 0.0
+  max_tokens: 5
+input_variables:
+  - review
+template: |
+  Classifique o sentimento da avaliação abaixo como "positivo", "negativo" ou "neutro".
+  Use "neutro" quando a avaliação for apenas descritiva ou misturar pontos bons e ruins.
+  Responda apenas com o rótulo, em letras minúsculas.
+
+  Exemplo:
+  Avaliação: Chegou no prazo, é um cabo comum.
+  Sentimento: neutro
+
+  Avaliação: {review}
+  Sentimento:
+changelog: >
+  Adiciona a classe "neutro" e um exemplo few-shot. Corrige avaliações
+  mistas que a 1.0.0 forçava para positivo/negativo (ver evals/sentiment_golden.jsonl).

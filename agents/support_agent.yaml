@@ -1,0 +1,47 @@
+# Especificação declarativa de um agente de IA ("agent as configuration").
+# Tudo o que define o comportamento do agente está aqui e é versionado no Git:
+# modelo (com versão fixada), prompt (referência imutável nome@versão),
+# ferramentas (com schema) e guardrails. Mudou qualquer item => nova versão.
+apiVersion: gcs.mlops/v1
+kind: AgentSpec
+metadata:
+  name: support-agent
+  version: 2.1.0
+  owner: equipe-gcs
+  changelog: Adiciona aprovação humana para abrir_chamado.
+
+spec:
+  model:
+    provider: anthropic
+    id: claude-sonnet-5-5        # versão exata do modelo, nunca "latest"
+    temperature: 0.2
+    max_tokens: 1024
+
+  system_prompt: support_agent_system@1.0.0
+
+  tools:
+    - name: buscar_pedido
+      description: Consulta o status de um pedido pelo número.
+      input_schema:
+        type: object
+        properties:
+          numero_pedido:
+            type: string
+            pattern: "^[0-9]{6}$"
+        required: [numero_pedido]
+
+    - name: abrir_chamado
+      description: Abre um chamado para a equipe humana (ex. reembolso alto).
+      input_schema:
+        type: object
+        properties:
+          numero_pedido: {type: string}
+          motivo: {type: string, maxLength: 500}
+        required: [numero_pedido, motivo]
+
+  guardrails:
+    max_turns: 8
+    require_human_approval: [abrir_chamado]
+    blocked_topics:
+      - dados de cartão de crédito
+      - aconselhamento jurídico

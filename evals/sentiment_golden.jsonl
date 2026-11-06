@@ -1,0 +1,12 @@
+{"review": "Produto excelente, superou minhas expectativas!", "expected": "positivo"}
+{"review": "Adorei, chegou rápido e funciona perfeitamente.", "expected": "positivo"}
+{"review": "Ótima qualidade, recomendo a todos.", "expected": "positivo"}
+{"review": "Muito bom, vale cada centavo.", "expected": "positivo"}
+{"review": "Péssimo, quebrou no primeiro dia.", "expected": "negativo"}
+{"review": "Horrível, não funciona e o suporte não responde.", "expected": "negativo"}
+{"review": "Produto ruim, me arrependi da compra.", "expected": "negativo"}
+{"review": "Veio com defeito e a embalagem rasgada.", "expected": "negativo"}
+{"review": "É uma caneca branca de 300 ml.", "expected": "neutro"}
+{"review": "Chegou na terça-feira, conforme informado.", "expected": "neutro"}
+{"review": "Bom acabamento, mas a bateria é ruim.", "expected": "neutro"}
+{"review": "A cor é ótima, porém o tamanho é péssimo.", "expected": "neutro"}

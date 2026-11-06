@@ -1,0 +1,9 @@
+{
+  "sentiment_classifier": {
+    "1.0.0": "3523124fbaa351b73df43bbf62f7270a797f4052ffec715ec7123c45be5b4547",
+    "1.1.0": "9d4d1434405fbe94c05a317275a81204e3357bc58da8b50a3fd68e6fb984c2c8"
+  },
+  "support_agent_system": {
+    "1.0.0": "2fefd6ab10867fa372f220aacf8f340e337f91e719134c60b5516d6edeb19a12"
+  }
+}

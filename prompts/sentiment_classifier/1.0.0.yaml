@@ -1,0 +1,16 @@
+name: sentiment_classifier
+version: 1.0.0
+description: Classifica o sentimento de avaliações de produtos.
+author: equipe-gcs
+model_hints:
+  temperature: 0.0
+  max_tokens: 5
+input_variables:
+  - review
+template: |
+  Classifique o sentimento da avaliação abaixo como "positivo" ou "negativo".
+  Responda apenas com o rótulo.
+
+  Avaliação: {review}
+  Sentimento:
+changelog: Versão inicial (duas classes).

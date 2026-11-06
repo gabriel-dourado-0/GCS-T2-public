@@ -1,0 +1,4 @@
+# Fim de linha LF em todos os sistemas: mantém estáveis os hashes de prompts,
+# parâmetros e métricas entre Windows, Linux e a CI.
+* text=auto eol=lf
+*.pkl binary
